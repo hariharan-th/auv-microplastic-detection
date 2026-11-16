@@ -1,0 +1,39 @@
+system:
+  vehicle_id: auv-01
+  database: ../data/auv_measurements.sqlite3
+  csv_directory: ../data/csv
+  sample_interval_s: 10
+  pump_duration_ms: 1500
+  measurement_timeout_s: 30
+  dry_run: false
+
+serial:
+  enabled: true
+  port: /dev/ttyACM0
+  baudrate: 115200
+  timeout_s: 1.0
+
+i2c:
+  enabled: true
+  bus_number: 1
+  as7265x_address: 0x49
+  ads1115_address: 0x48
+  ads1115_channel: 0
+
+mavlink:
+  enabled: false
+  connection: /dev/ttyUSB0
+  baud: 57600
+  source_system: 255
+  # Receive-only: the application never sends MAVLink commands.
+
+mqtt:
+  enabled: false
+  host: localhost
+  port: 8883
+  topic_prefix: auv/microplastic
+  client_id: auv-01-logger
+  tls: true
+  username_env: AUV_MQTT_USERNAME
+  password_env: AUV_MQTT_PASSWORD
+  ca_file: ""
