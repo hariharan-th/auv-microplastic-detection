@@ -22,3 +22,6 @@ auv-logger = "auv_logger.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+auv_logger = ["dashboard/*.html", "dashboard/*.png"]

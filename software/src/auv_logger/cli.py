@@ -6,6 +6,7 @@ import time
 from datetime import datetime, timezone
 
 from .config import load_config
+from .dashboard_server import serve_dashboard
 from .mqtt_out import MqttOut
 from .processing import describe_spectrum
 from .sampler import Sampler
@@ -21,7 +22,9 @@ def main():
     parser = argparse.ArgumentParser(description="Offline-first AUV optical payload logger")
     parser.add_argument("--config", required=True, help="Path to YAML configuration")
     parser.add_argument("--dry-run", action="store_true", help="Use simulated sensor and sampler data")
-    parser.add_argument("command", choices=("run", "doctor"))
+    parser.add_argument("--host", default="127.0.0.1", help="Dashboard bind address (default: localhost only)")
+    parser.add_argument("--port", type=int, default=8080, help="Dashboard HTTP port")
+    parser.add_argument("command", choices=("run", "doctor", "dashboard"))
     args = parser.parse_args()
     cfg = load_config(args.config)
     dry = args.dry_run or cfg["system"].get("dry_run", False)
@@ -29,6 +32,10 @@ def main():
         print(json.dumps({"config": "loaded", "dry_run": dry, "serial_enabled": cfg["serial"].get("enabled", True),
                           "i2c_enabled": cfg["i2c"].get("enabled", True), "mavlink_enabled": cfg["mavlink"].get("enabled", False),
                           "mqtt_enabled": cfg["mqtt"].get("enabled", False)}, indent=2))
+        return
+
+    if args.command == "dashboard":
+        serve_dashboard(cfg["system"]["database"], args.host, args.port)
         return
 
     store = Store(cfg["system"]["database"], cfg["system"]["csv_directory"])

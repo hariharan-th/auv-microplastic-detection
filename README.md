@@ -16,6 +16,7 @@ The included MAVLink client is receive-only. It sends no arming, mode, mission, 
 ```text
 firmware/esp32_sampler/       ESP32 pump/laser controller
 software/auv_logger/          Raspberry Pi acquisition and logging package
+software/src/auv_logger/dashboard/  Local dashboard and prototype image
 config/                       Example configuration (no credentials)
 docs/                         Wiring, architecture, safety, tests, design report
 ```
@@ -47,6 +48,19 @@ auv-logger --config ../config/config.yaml run
 
 The logger creates its SQLite database and CSV export directory as configured. MQTT is disabled unless enabled in config and credentials are supplied through environment variables. For testing without hardware use `--dry-run`.
 
+## Local live dashboard
+
+Run the logger in one terminal, then start the dashboard in another:
+
+```bash
+auv-logger --config ../config/config.yaml run
+auv-logger --config ../config/config.yaml dashboard
+```
+
+Open `http://127.0.0.1:8080`. The page refreshes from the same SQLite database every five seconds and displays sample time, ID, vehicle, available spectral channel count, and descriptive peak wavelength. The API is read-only. Bind to another address only on a trusted, access-controlled network: `auv-logger --config ../config/config.yaml --host 0.0.0.0 dashboard`.
+
+Dry-run logger records are marked `SIMULATION`. The attached overview/research screenshots are design references, and the prototype photo is user supplied. None are live sensor observations. The dashboard does not classify particles or report a validated concentration. See [dashboard notes](docs/dashboard.md).
+
 ## ESP32 firmware
 
 Open `firmware/esp32_sampler/esp32_sampler.ino` in Arduino IDE, select the ESP32 Dev Module, inspect the GPIO/polarity constants, and flash with pump and laser disconnected. The serial protocol and hardware checks are in [wiring and integration](docs/wiring-and-integration.md). Confirm the outputs stay off after reset and on serial disconnect before connecting drivers.
@@ -67,7 +81,7 @@ The Pi sends newline-delimited `SAMPLE_START,<id>,<pump_ms>` and `MEASURE_DONE,<
 
 ## Known limitations
 
-AS7265X channels and LDR readings are optical measurements, not a validated microplastic identification result. Establish dark/reference standards, repeatability, particle-size response, water-matrix effects, and laboratory ground truth before reporting concentrations or species. GNSS position is only available at the surface; underwater position is estimated by the autopilot and depends on installed sensors and tuning. GSM/MQTT delivery is opportunistic. This prototype software does not implement a cloud service or dashboard.
+AS7265X channels and LDR readings are optical measurements, not a validated microplastic identification result. Establish dark/reference standards, repeatability, particle-size response, water-matrix effects, and laboratory ground truth before reporting concentrations or species. GNSS position is only available at the surface; underwater position is estimated by the autopilot and depends on installed sensors and tuning. GSM/MQTT delivery is opportunistic. The dashboard is local and does not provide cloud hosting or user authentication.
 
 ## Safety
 
