@@ -2,14 +2,6 @@
 
 Prototype software and notes for an AUV payload that records optical measurements and water samples. This repository focuses on the latest payload concept rather than vehicle-wide mechanical design.
 
-## Ocean Microplastic Monitor
-
-![Overview screenshot](software/src/auv_logger/dashboard/overview-reference.png)
-
-![Research and sample-table screenshot](software/src/auv_logger/dashboard/research-reference.png)
-
-![AUV prototype photo](software/src/auv_logger/dashboard/prototype.png)
-
 ## System boundary
 
 - **Dedicated ArduSub-compatible autopilot:** sole authority for propulsion, depth/attitude control, arming, failsafes, and vehicle navigation.
@@ -98,3 +90,11 @@ Bench-test with propellers removed and pump/laser loads disconnected. Use a seal
 ## License
 
 No license has been selected. Until the project owner adds one, all rights are reserved by default; do not assume permission to reuse or redistribute this repository.
+
+## Ocean Microplastic Monitor
+
+![Overview screenshot](software/src/auv_logger/dashboard/overview-reference.png)
+
+![Research and sample-table screenshot](software/src/auv_logger/dashboard/research-reference.png)
+
+![AUV prototype photo](software/src/auv_logger/dashboard/prototype.png)
